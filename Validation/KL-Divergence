@@ -3,65 +3,73 @@ import numpy as np
 from scipy.special import rel_entr
 
 
-def kl_div(data1, data2):
-    # calculate num of bins
-    num_bins = NumBins(data1)
-    print("Number of bins according to Doane method", num_bins)
-    print()
-    print()
-    # max & min data values
-    max_par = max(data1)
-    max_child = max(data2)
-    if max_par >= max_child:
-        temp = max_par
-    else:
-        temp = max_child
-    # create dataframes
-    df = pd.DataFrame([data1,data2])
-    # create bins
-    bins = np.linspace(0, temp, num_bins)
-    
-    # parent model data
-    par_data = pd.cut(df.iloc[0], bins=bins)         # parent data
-    par_freq = par_data.value_counts(sort=False)     # counting the number in each bin
-    print("Binned parent data and frequencies")
-    print()
-    print(par_freq)
-    print()
-    print()
-    par_prob = par_freq/sum(par_freq)
-    print("Parent prob data", par_prob)
-    
-    # child model
-    chld_data = pd.cut(df.iloc[1], bins=bins)         # parent data
-    chld_freq = chld_data.value_counts(sort=False)    # counting the number in each bin
-    print("Binned child data", end="\n\n")
-    print(chld_freq)
-    chld_prob = chld_freq/sum(chld_freq)
-    print("Child prob data", chld_prob)
-    # calculate divergence
-    diver = KL(par_prob,chld_prob)
-    print("KL Divergence: ", diver)
-    # based on Scipy entropy
-    Kl_val = sum(rel_entr(par_prob, chld_prob))
-    print("KL divergence based on Scipy entropy method : ", Kl_val)
-    
-    
-def NumBins(data):
-    number =  len(np.histogram_bin_edges(data, bins="doane"))
-    print("Doane: ", number)
-    return number
-                  
-def KL(P,Q):
-    """ Epsilon is used here to avoid conditional code for
-    checking that neither P nor Q is equal to 0. """
-    epsilon = 0.00001
+class KLDivergence:
 
-     # You may want to instead make copies to avoid changing the np arrays.
-    P = P+epsilon
-    Q = Q+epsilon
+    def __init__(self, p_data, c_data):
+        self.data1 = p_data
+        self.data2 = c_data
+        self.kl_div(self.data1, self.data2)
 
-    divergence = np.sum(P*np.log(P/Q))
-    return divergence
+    def kl_div(self, data1, data2):
+        # calculate num of bins
+        num_bins = self.NumBins(self.data1)
+        print("Number of bins according to Doane method", num_bins)
+        print()
+        print()
+        # max & min data values
+        max_par = max(self.data1)
+        max_child = max(self.data2)
+        if max_par >= max_child:
+            temp = max_par
+        else:
+            temp = max_child
+        # create dataframes
+        df = pd.DataFrame([self.data1, self.data2])
+        # create bins
+        bins = np.linspace(0, temp, num_bins)
 
-    
+        # parent model data
+        par_data = pd.cut(df.iloc[0], bins=bins)  # parent data
+        par_freq = par_data.value_counts(sort=False)  # counting the number in each bin
+        print("Binned parent data and frequencies")
+        print()
+        print(par_freq)
+        print()
+        print()
+        par_prob = par_freq / sum(par_freq)
+        print("Parent prob data", par_prob)
+
+        # child model
+        chld_data = pd.cut(df.iloc[1], bins=bins)  # parent data
+        chld_freq = chld_data.value_counts(sort=False)  # counting the number in each bin
+        print("Binned child data", end="\n\n")
+        print(chld_freq)
+        chld_prob = chld_freq / sum(chld_freq)
+        print("Child prob data", chld_prob)
+        # calculate divergence
+        diver = self.KL(par_prob, chld_prob)
+        print("KL Divergence: ", diver)
+        
+
+    def NumBins(self, data):
+        number = len(np.histogram_bin_edges(data, bins="doane"))
+        print("Doane: ", number)
+        return number
+
+    def KL(self, P, Q):
+        """ Epsilon is used here to avoid conditional code for
+        checking that neither P nor Q is equal to 0. """
+        epsilon = 0.00001
+
+        # You may want to instead make copies to avoid changing the np arrays.
+        P = P + epsilon
+        Q = Q + epsilon
+
+        divergence = np.sum(P * np.log(P / Q))
+        return divergence
+
+# Example demonstration
+a = np.random.randint(0, 10, 100)
+b = np.random.randint(2, 12, 100)
+print(a,b)
+KLDivergence(a,b)
