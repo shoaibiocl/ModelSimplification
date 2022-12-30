@@ -1,0 +1,34 @@
+"These are the methods for generating code blocks using non-parameteric Kernel Density Estimation. The user should pass the length of stay 
+data to the np_abstraction method and then use the printed code in their child models."
+
+from sklearn.neighbors import KernelDensity
+from sklearn.model_selection import GridSearchCV
+from iteration_utilities import deepflatten
+
+def np_abstraction(data):
+    global best_kde
+        
+    data = list(deepflatten(data, depth=1))
+    x = np.array(data)  
+    x_train = x[:, np.newaxis]
+    x_test = np.linspace(np.min(x), np.max(x), 2000)[:, np.newaxis]
+    kernels = ['gaussian', 'tophat']
+    # bandwith values
+    h_vals = np.arange(0.2, 1, .2)
+    grid = GridSearchCV(KernelDensity(),{'bandwidth': h_vals, 'kernel': kernels},scoring=my_scores)
+    grid.fit(x_train)
+    best_kde = grid.best_estimator_
+    log_dens = best_kde.score_samples(x_test)
+    plt.fill(x_test, np.exp(log_dens), c='green')
+    plt.title("Best Kernel: " + best_kde.kernel+" h="+"{:.2f}".format(best_kde.bandwidth))
+    plt.show()
+    print(black("Replace the code block by:","bold"))
+    print("yield self.hold(best_kde.sample()[0][0])")
+    return best_kde
+
+def my_scores(estimator, X):
+    scores = estimator.score_samples(X)
+    # Remove -inf
+    scores = scores[scores != float('-inf')]
+    # Return the mean values
+    return np.mean(scores)
