@@ -6,8 +6,6 @@ import matplotlib.pyplot as plt
 import warnings
 warnings.filterwarnings("ignore")
 import numpy as np
-from sklearn.neighbors import KernelDensity
-from sklearn.model_selection import GridSearchCV
 from iteration_utilities import deepflatten
 
 
@@ -76,11 +74,3 @@ def abstraction(output2):
         #print(round_t)
         print("yield self.hold(stats.{}.rvs{})".format(p[0],f.fitted_param[(p[0])]))
        
-            
-        
-def my_scores(estimator, X):
-    scores = estimator.score_samples(X)
-    # Remove -inf
-    scores = scores[scores != float('-inf')]
-    # Return the mean values
-    return np.mean(scores)
