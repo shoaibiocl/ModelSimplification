@@ -6,3 +6,5 @@ return the best fitting distributions along with the P values. It will also prin
 to be used in the metasimulation model. 
 Additionally, the method also yields five best-fitting probability distributions based on sum-squared errors (SSEs) using the Fitter Python library. It also 
 prints the code block based on SSE estimate.
+
+The used must use the abstraction(data) method for code block generation. Data should be length of stay values collected across a single simulation replication.
