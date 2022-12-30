@@ -18,4 +18,4 @@ This function is developed to estimate the probabilty density of the length of s
 
 ## KL-Divergence - Outcome validation
 
-The _kl_div(data2, data2)_ function was developed to automate the outcome validation exercise. The function inputs the overall length of stay values from the parent and child models and compares the ditsributions. In effect, the diversion of one probability ditribution from the other is measured. __
+The _kl_div(data2, data2)_ function was developed to automate the outcome validation exercise. The function inputs the overall length of stay values from the parent and child models and compares their ditsributions. In effect, the diversion of one probability ditribution from the other is measured. 
