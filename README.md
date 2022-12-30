@@ -15,3 +15,7 @@ Further, in case none of the standard probability distributions seem to fit well
 ## ABSTRACTION - non-parametric
 
 This function is developed to estimate the probabilty density of the length of stay data generated and collected from the parent simulation model. It used kernel density estimation available on Scikit-Learn package. The output from the function can directly be used to replace the abstracted system in the parent model. 
+
+## KL-Divergence - Outcome validation
+
+The _kl_div(data2, data2)_ function was developed to automate the outcome validation exercise. The function inputs the overall length of stay values from the parent and child models and compares the ditsributions. In effect, the diversion of one probability ditribution from the other is measured. __
