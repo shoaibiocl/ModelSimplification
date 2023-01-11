@@ -48,9 +48,10 @@ def abstraction(output2):
             if i < 1:
                 dist = getattr(stats, j[0])
                 p_value = j[2]
-                round_param = [round(num, 2) for num in param]
-                print(black("Replace your code block with:", 'bold'))
-                print("yield self.hold(stats.{}.rvs{})".format(j[0], param))
+                round_param = tuple([round(num, 4) for num in param])
+                temp = j[0]
+                #print(black("Replace your code block with:", 'bold'))
+                #print("yield self.hold(stats.{}.rvs{})".format(j[0], round_param))
                 i += 1
         
     print("*"*100)
@@ -67,10 +68,14 @@ def abstraction(output2):
     if p_value < 0.05:
         print('\033[1m' + "None of the distributions fit the data, try non-parametric 'np_abstraction' method"+'\033[0m')
     else:
-        print(black("Replace the code block by:","bold"))
+        print(black("On the basis of SSE replace the code block by:","bold"))
         p1 = f.get_best(method = 'sumsquare_error')
         p = list(p1.keys())
         #round_t = [round(num, 2) for num in f.fitted_param[(p[0])]]
         #print(round_t)
-        print("yield self.hold(stats.{}.rvs{})".format(p[0],f.fitted_param[(p[0])]))
+        k = f.fitted_param[(p[0])]
+        k1 = tuple([round(x,4) if isinstance(x, float) else x for x in k])
+        print("yield self.hold(stats.{}.rvs{})".format(p[0],k1))
+        print(black("On the basis of P value replace your code block with:", 'bold'))
+        print("yield self.hold(stats.{}.rvs{})".format(temp, round_param))
        
